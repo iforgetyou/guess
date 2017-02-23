@@ -20,7 +20,7 @@ import java.util.Random;
 import weixin.popular.bean.message.EventMessage;
 
 /**
- * 2017/2/22 yanzhang153
+ * 2017/2/22 iforgetyou
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
