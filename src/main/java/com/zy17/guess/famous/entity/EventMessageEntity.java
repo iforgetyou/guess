@@ -4,22 +4,16 @@ import lombok.Data;
 
 import org.springframework.beans.BeanUtils;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import weixin.popular.bean.message.AroundBeacon;
-import weixin.popular.bean.message.ChosenBeacon;
-import weixin.popular.bean.message.EventMessage;
-
 @Data
 @Entity
-public class EventMessageEntity   {
+public class EventMessageEntity {
   public EventMessageEntity() {
   }
 
-  public EventMessageEntity(EventMessage msg) {
+  public EventMessageEntity(weixin.popular.bean.message.EventMessage msg) {
     BeanUtils.copyProperties(msg, this);
   }
 

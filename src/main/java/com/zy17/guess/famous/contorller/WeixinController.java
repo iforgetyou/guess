@@ -26,7 +26,7 @@ import weixin.popular.util.XMLConverUtil;
 
 /**
  * 服务端事件消息接收
- * 2017/2/21 iforgetyou
+ * 2017/2/21 zy17
  */
 @Slf4j
 @Controller
@@ -95,7 +95,7 @@ public class WeixinController {
     }
 
     XMLMessage resp = bizService.handleEvent(event);
-    log.info("resp:{}", resp.toXML());
+    log.info("{} resp:{}", event.getMsgId(), resp.toXML());
     return resp.toXML();
   }
 }

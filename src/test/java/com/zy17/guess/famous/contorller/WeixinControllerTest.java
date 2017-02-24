@@ -2,8 +2,8 @@ package com.zy17.guess.famous.contorller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.zy17.guess.famous.other.EventType;
-import com.zy17.guess.famous.service.msghandler.DefaultMsgHandle;
+import com.zy17.guess.famous.EventGen;
+import com.zy17.guess.famous.service.CacheService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.user.FollowResult;
+import weixin.popular.support.TokenManager;
 import weixin.popular.util.SignatureUtil;
-import weixin.popular.util.XMLConverUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,6 +33,9 @@ public class WeixinControllerTest {
 
   @Value("${weixin.token}")
   private String token;
+
+  @Autowired
+  CacheService cache;
 
   @Autowired
   private TestRestTemplate restTemplate;
@@ -58,27 +63,68 @@ public class WeixinControllerTest {
   }
 
   @Test
-  public void textMessage() {
-//    构建文本消息
-    EventMessage event = getTextEvent("test");
-// 测试返回结果
-    String body = restTemplate.postForObject(getUrl(), event, String.class);
-    assertThat(body).contains(DefaultMsgHandle.DEFAULT);
-  }
-
-
-  @Test
-  public void RandomCmdMessage() {
+  public void RandomCmdMessageTest() {
     // 发送一张图片
-    EventMessage imageEvent = getImageEvent();
+    EventMessage imageEvent = EventGen.getImageEvent();
     restTemplate.postForObject(getUrl(), imageEvent, String.class);
-    restTemplate.postForObject(getUrl(), getTextEvent("2"), String.class);
-    restTemplate.postForObject(getUrl(), getTextEvent("3"), String.class);
-    restTemplate.postForObject(getUrl(), getTextEvent("4"), String.class);
+    restTemplate.postForObject(getUrl(), EventGen.getTextEvent("2"), String.class);
+    restTemplate.postForObject(getUrl(), EventGen.getTextEvent("3"), String.class);
+    restTemplate.postForObject(getUrl(), EventGen.getTextEvent("4"), String.class);
 
     // 随机获取图片
-    String body = restTemplate.postForObject(getUrl(), getTextEvent("1"), String.class);
+    String body = restTemplate.postForObject(getUrl(), EventGen.getTextEvent("1"), String.class);
     assertThat(body.contains(imageEvent.getMediaId()));
+  }
+
+  @Test
+  public void imageAddTagTest() {
+    // 发送一张图片
+    EventMessage imageEvent = EventGen.getImageEvent();
+    String resp = restTemplate.postForObject(getUrl(), imageEvent, String.class);
+
+    assertThat(resp).contains("分钟内添加文字标签");
+    assertThat(resp).contains("收到图片");
+
+    String body = restTemplate.postForObject(getUrl(), EventGen.getTextEvent("测试标签"), String.class);
+    System.out.println(body);
+    assertThat(body.contains("news"));
+  }
+
+  @Test
+  public void newUserTest() {
+    String body = restTemplate.postForObject(getUrl(), EventGen.getSubEvent(), String.class);
+    System.out.println(body);
+  }
+
+  @Test
+  public void AnswerTest() {
+    restTemplate.postForObject(getUrl(), EventGen.getImageEvent(), String.class);
+    restTemplate.postForObject(getUrl(), EventGen.getTextEvent("这是真标签"), String.class);
+
+    restTemplate.postForObject(getUrl(), EventGen.getTextEvent("1"), String.class);
+
+    String a = restTemplate.postForObject(getUrl(), EventGen.getTextEvent("2"), String.class);
+    System.out.println(a);
+  }
+
+  @Test
+  public void cacheTest() throws InterruptedException {
+    String key = "test";
+    cache.put(key, "value");
+    Object value = cache.get(key);
+    Thread.sleep(40000);
+    assertThat(value).isNotNull();
+    Object pop = cache.pop(key);
+    assertThat(pop).isNotNull();
+    assertThat(cache.get(key)).isNull();
+  }
+
+  //  @Test
+  public void getAllUser() {
+    FollowResult followResult = UserAPI.userGet(TokenManager.getDefaultToken(), null);
+    for (String id : followResult.getData().getOpenid()) {
+      System.out.println(id);
+    }
   }
 
   public String getUrl() {
@@ -86,30 +132,6 @@ public class WeixinControllerTest {
     String nonce = String.valueOf(new Random().nextInt());
     String signature = SignatureUtil.generateEventMessageSignature(token, timestamp, nonce);
     return "/weixin?signature=" + signature + "&timestamp=" + timestamp + "&nonce=" + nonce + "&echostr=1";
-  }
-
-  public EventMessage getTextEvent(String content) {
-    //    构建文本消息
-    EventMessage event = new EventMessage();
-    event.setMsgType(EventType.TEXT.getValue());
-    event.setFromUserName("1348831860");
-    event.setToUserName("1348831860");
-    event.setContent(content);
-    event.setCreateTime((int) System.currentTimeMillis());
-    event.setMsgId("msgid" + new Random().nextInt(100000));
-    System.out.println(XMLConverUtil.convertToXML(event));
-    return event;
-  }
-
-  public EventMessage getImageEvent() {
-    EventMessage event = new EventMessage();
-    event.setMsgType(EventType.IMAGE.getValue());
-    event.setFromUserName("1348831860");
-    event.setToUserName("1348831860");
-    event.setMediaId("mediaid" + new Random().nextInt(100000));
-    event.setCreateTime((int) System.currentTimeMillis());
-    event.setMsgId("msgid" + new Random().nextInt(100000));
-    return event;
   }
 
 

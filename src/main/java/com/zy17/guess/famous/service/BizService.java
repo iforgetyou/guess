@@ -1,9 +1,12 @@
 package com.zy17.guess.famous.service;
 
+import com.zy17.guess.famous.service.msghandler.AnswerMsgHandle;
 import com.zy17.guess.famous.service.msghandler.DefaultMsgHandle;
+import com.zy17.guess.famous.service.msghandler.FirstLoginHandle;
 import com.zy17.guess.famous.service.msghandler.ImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.PersistMsgHandle;
 import com.zy17.guess.famous.service.msghandler.RandomImageMsgHandle;
+import com.zy17.guess.famous.service.msghandler.TagMsgHandle;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,22 +21,30 @@ import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
 
 /**
- * 2017/2/22 iforgetyou
+ * 2017/2/22 zy17
  */
 @Slf4j
 @Service
 public class BizService {
   List<WeixinMsgHandle> handlers = new ArrayList<>();
 
-  public BizService(@Autowired DefaultMsgHandle defaultMsgHandle,
+  public BizService(
       @Autowired ImageMsgHandle imageMsgHandle,
+      @Autowired FirstLoginHandle firstLoginHandle,
       @Autowired RandomImageMsgHandle randomImageMsgHandle,
-      @Autowired PersistMsgHandle persistMsgHandle
+      @Autowired AnswerMsgHandle answerMsgHandle,
+      @Autowired TagMsgHandle tagMsgHandle,
+      @Autowired PersistMsgHandle persistMsgHandle,
+      @Autowired DefaultMsgHandle defaultMsgHandle
   ) {
-
     handlers.add(persistMsgHandle);
+    handlers.add(firstLoginHandle);
     handlers.add(imageMsgHandle);
+    // 文字处理开始
     handlers.add(randomImageMsgHandle);
+    handlers.add(answerMsgHandle);
+    handlers.add(tagMsgHandle);
+    // 文字处理结束
     handlers.add(defaultMsgHandle);
   }
 
@@ -55,8 +66,9 @@ public class BizService {
       resp = new XMLTextMessage(
           req.getFromUserName(),
           req.getToUserName(),
-          "Ծ‸Ծ 有bug？");
+          "Ծ‸Ծ 有bug？开发小哥快去修复~");
     }
+    // TODO 异步保存响应?
     return resp;
   }
 }
