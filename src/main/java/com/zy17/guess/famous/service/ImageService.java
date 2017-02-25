@@ -16,6 +16,7 @@ import weixin.popular.bean.xmlmessage.XMLImageMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 
 /**
+ * 随机找图片
  * 2017/2/24 zy17
  */
 @Service

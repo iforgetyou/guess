@@ -3,6 +3,7 @@ package com.zy17.guess.famous.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.zy17.guess.famous.entity.EventMessageEntity;
+import com.zy17.guess.famous.entity.ImageTag;
 import com.zy17.guess.famous.other.MsgType;
 
 import org.junit.Test;
@@ -30,6 +31,8 @@ public class EventMessageEntityRepositoryTest {
 
   @Autowired
   private EventMessageRepository repository;
+  @Autowired
+  private ImageTagRepository tagDao;
 
   @Test
   public void testExample() throws Exception {
@@ -65,7 +68,7 @@ public class EventMessageEntityRepositoryTest {
   @Test
   public void eventSave() {
 
-//        <ToUserName>gh_85872950c618</ToUserName>
+//    <ToUserName>gh_85872950c618</ToUserName>
 //    <FromUserName>oTbr8wJYZIU7cgMyPAGqRzsg9XX4</FromUserName>
 //    <CreateTime>1487947435</CreateTime>
 //    <MsgType>event</MsgType>
@@ -84,6 +87,26 @@ public class EventMessageEntityRepositoryTest {
       entity.setMsgId("e_" + entity.getCreateTime());
     }
     repository.save(entity);
+  }
+
+  @Test
+  public void findImageByTag() {
+    String tag = "搜索标签";
+    ImageTag entity = new ImageTag();
+    entity.setTag(tag);
+    entity.setTagMsgId("123");
+    entity.setImageMsgId("345");
+    tagDao.save(entity);
+    entity.setImageMsgId("333");
+    tagDao.save(entity);
+    long count = tagDao.countByTag(tag);
+    System.out.println(count);
+    int page = new Random().nextInt((int) count);
+    System.out.println(page);
+    Pageable pageable = new PageRequest(page, 1);
+    Page<ImageTag> imageTags = tagDao.findAllByTag(tag, pageable);
+    System.out.println(imageTags.getContent());
+    assertThat(imageTags.getNumber()).isGreaterThan(0);
   }
 
 }

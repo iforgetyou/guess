@@ -4,6 +4,7 @@ import com.zy17.guess.famous.dao.EventMessageRepository;
 import com.zy17.guess.famous.dao.ImageTagRepository;
 import com.zy17.guess.famous.entity.EventMessageEntity;
 import com.zy17.guess.famous.entity.ImageTag;
+import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
 import com.zy17.guess.famous.service.WeixinMsgHandle;
@@ -23,6 +24,7 @@ import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 @Component
 public class TagMsgHandle implements WeixinMsgHandle {
   public static final String DEFAULT = "标签添加成功";
+  public static final String DESCRIPTION = "添加成功，试试输入标签搜索下~";
 
   @Autowired
   CacheService cache;
@@ -33,7 +35,7 @@ public class TagMsgHandle implements WeixinMsgHandle {
 
   @Override
   public boolean canHandle(weixin.popular.bean.message.EventMessage msg) {
-    if (msg.getMsgType().equals(MsgType.TEXT.getValue())) {
+    if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && CMDType.notCmd(msg.getContent())) {
       if (cache.get(CacheService.getNewImageKey(msg.getFromUserName())) != null)
         return true;
     }
@@ -51,13 +53,14 @@ public class TagMsgHandle implements WeixinMsgHandle {
     image.setTitle(DEFAULT + ":" + msg.getContent());
     image.setPicurl(imageEntity.getPicUrl());
     image.setUrl(imageEntity.getUrl());
-    image.setDescription("添加成功，试试输入标签搜索下~");
+    image.setDescription(DESCRIPTION);
     articles.add(image);
     // 保存图片标签关系
     ImageTag imageTag = new ImageTag();
     imageTag.setTagMsgId(msg.getMsgId());
     imageTag.setTag(msg.getContent());
     imageTag.setImageMsgId(imageEntity.getMsgId());
+    imageTag.setImageMediaId(imageEntity.getMediaId());
     imageTagDao.save(imageTag);
 
     XMLMessage resp = new XMLNewsMessage(

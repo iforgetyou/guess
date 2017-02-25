@@ -1,6 +1,7 @@
 package com.zy17.guess.famous.service.msghandler;
 
 
+import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.ImageService;
 import com.zy17.guess.famous.service.WeixinMsgHandle;
@@ -27,7 +28,7 @@ public class RandomImageMsgHandle implements WeixinMsgHandle {
   public boolean canHandle(weixin.popular.bean.message.EventMessage msg) {
     String cmd = msg.getContent();
     //
-    if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && cmd.equals("1")) {
+    if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && cmd.equals(CMDType.SEARCH.getValue())) {
       return true;
     }
     return false;

@@ -15,4 +15,5 @@ public class ImageTag {
   String imageMsgId;
   String tagMsgId;
   String tag;
+  String imageMediaId;
 }

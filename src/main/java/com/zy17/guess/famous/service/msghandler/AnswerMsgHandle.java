@@ -2,6 +2,7 @@ package com.zy17.guess.famous.service.msghandler;
 
 import com.zy17.guess.famous.dao.ImageTagRepository;
 import com.zy17.guess.famous.entity.ImageTag;
+import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
 import com.zy17.guess.famous.service.ImageService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
 
@@ -46,7 +48,7 @@ public class AnswerMsgHandle implements WeixinMsgHandle {
   }
 
   @Override
-  public XMLMessage handleMsg(weixin.popular.bean.message.EventMessage msg) {
+  public XMLMessage handleMsg(EventMessage msg) {
     // 缓存中获取上次发送的图片
     XMLMessage resp = null;
     String key = CacheService.getQuestionKey(msg.getFromUserName());
@@ -54,7 +56,7 @@ public class AnswerMsgHandle implements WeixinMsgHandle {
     if (imageMsgId != null) {
       // 找到图片对应的标签
       ImageTag imageTag = imageTagDao.findOne((String) imageMsgId);
-      if (msg.getContent().equals("2")) {
+      if (msg.getContent().equals(CMDType.ANSWER.getValue())) {
         // 想知道答案
         resp = new XMLTextMessage(
             msg.getFromUserName(),

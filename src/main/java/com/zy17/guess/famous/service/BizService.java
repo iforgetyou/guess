@@ -6,6 +6,7 @@ import com.zy17.guess.famous.service.msghandler.FirstLoginHandle;
 import com.zy17.guess.famous.service.msghandler.ImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.PersistMsgHandle;
 import com.zy17.guess.famous.service.msghandler.RandomImageMsgHandle;
+import com.zy17.guess.famous.service.msghandler.SearchImageHandle;
 import com.zy17.guess.famous.service.msghandler.TagMsgHandle;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class BizService {
       @Autowired RandomImageMsgHandle randomImageMsgHandle,
       @Autowired AnswerMsgHandle answerMsgHandle,
       @Autowired TagMsgHandle tagMsgHandle,
+      @Autowired SearchImageHandle searchImageHandle,
       @Autowired PersistMsgHandle persistMsgHandle,
       @Autowired DefaultMsgHandle defaultMsgHandle
   ) {
@@ -44,6 +46,7 @@ public class BizService {
     handlers.add(randomImageMsgHandle);
     handlers.add(answerMsgHandle);
     handlers.add(tagMsgHandle);
+    handlers.add(searchImageHandle);
     // 文字处理结束
     handlers.add(defaultMsgHandle);
   }

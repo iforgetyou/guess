@@ -42,7 +42,7 @@ public class ImageMsgHandle implements WeixinMsgHandle {
     XMLMessage xmlTextMessage = new XMLTextMessage(
         msg.getFromUserName(),
         msg.getToUserName(),
-        "收到图片,请在 " + CacheService.cacheTimeInMinutes + " 分钟内添加文字标签");
+        "收到图片,请在 " + CacheService.cacheTimeInMinutes + " 分钟内添加文字标签\n");
 
     // 缓存
     cache.put(CacheService.getNewImageKey(msg.getFromUserName()), msg.getMsgId());
