@@ -105,6 +105,7 @@ public class WeixinControllerTest {
 
     String a = restTemplate.postForObject(getUrl(), EventGen.getTextEvent("2"), String.class);
     System.out.println(a);
+    assertThat(a).contains("picurl").contains("");
   }
 
   @Test

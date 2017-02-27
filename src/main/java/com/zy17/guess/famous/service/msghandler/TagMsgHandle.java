@@ -7,7 +7,10 @@ import com.zy17.guess.famous.entity.ImageTag;
 import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
+import com.zy17.guess.famous.service.DoubanService;
 import com.zy17.guess.famous.service.WeixinMsgHandle;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,7 @@ import weixin.popular.bean.xmlmessage.XMLNewsMessage;
  * 添加标签处理
  * Created by zy17 on 2016/3/11.
  */
+@Slf4j
 @Component
 public class TagMsgHandle implements WeixinMsgHandle {
   public static final String DEFAULT = "标签添加成功";
@@ -32,6 +36,9 @@ public class TagMsgHandle implements WeixinMsgHandle {
   EventMessageRepository dao;
   @Autowired
   ImageTagRepository imageTagDao;
+
+  @Autowired
+  DoubanService doubanService;
 
   @Override
   public boolean canHandle(weixin.popular.bean.message.EventMessage msg) {
@@ -47,14 +54,7 @@ public class TagMsgHandle implements WeixinMsgHandle {
     String imageMsgId = (String) cache.pop(CacheService.getNewImageKey(msg.getFromUserName()));
     EventMessageEntity imageEntity = dao.findOne(imageMsgId);
 
-    // 创建图文消息,提示用户图片对应的标签?
-    ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
-    XMLNewsMessage.Article image = new XMLNewsMessage.Article();
-    image.setTitle(DEFAULT + ":" + msg.getContent());
-    image.setPicurl(imageEntity.getPicUrl());
-    image.setUrl(imageEntity.getUrl());
-    image.setDescription(DESCRIPTION);
-    articles.add(image);
+
     // 保存图片标签关系
     ImageTag imageTag = new ImageTag();
     imageTag.setTagMsgId(msg.getMsgId());
@@ -63,11 +63,23 @@ public class TagMsgHandle implements WeixinMsgHandle {
     imageTag.setImageMediaId(imageEntity.getMediaId());
     imageTagDao.save(imageTag);
 
+    // 创建图文消息,提示用户图片对应的标签?
+    ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
+    XMLNewsMessage.Article image = new XMLNewsMessage.Article();
+    image.setTitle(DEFAULT + ": " + msg.getContent());
+    image.setPicurl(imageEntity.getPicUrl());
+    image.setUrl(imageEntity.getUrl());
+    image.setDescription(DESCRIPTION);
+    articles.add(image);
+
+    articles.addAll(doubanService.searchMovieByNameFromCache(msg.getContent()));
+
     XMLMessage resp = new XMLNewsMessage(
         msg.getFromUserName(),
         msg.getToUserName(),
         articles
     );
+
     //回复
     return resp;
   }

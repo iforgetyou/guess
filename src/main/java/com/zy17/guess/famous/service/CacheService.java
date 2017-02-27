@@ -41,7 +41,7 @@ public class CacheService {
     try {
       result = cache.get(key);
     } catch (ExecutionException e) {
-      log.error("cache_get_error:" + e.getMessage());
+      log.debug("cache_get_error:" + e.getMessage());
     }
     return result;
   }
@@ -52,7 +52,7 @@ public class CacheService {
       result = cache.get(key);
       this.delete(key);
     } catch (ExecutionException e) {
-      log.error("cache_get_error:" + e.getMessage());
+      log.debug("cache_get_error:" + e.getMessage());
     }
     return result;
   }
