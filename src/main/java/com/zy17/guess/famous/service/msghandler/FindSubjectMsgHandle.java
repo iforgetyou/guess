@@ -24,7 +24,6 @@ import weixin.popular.bean.xmlmessage.XMLNewsMessage;
  */
 @Component
 public class FindSubjectMsgHandle implements WeixinMsgHandle {
-  public static final String DEFAULT = "消息已收到,功能仍在完善,请持续关注^-^";
   @Autowired
   SubjectService subjectService;
 

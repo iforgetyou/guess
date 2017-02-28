@@ -71,7 +71,6 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
 
     if (msg.getContent().equals(subject.getRightAnswer())) {
       // 回答正确
-      cache.delete(key);
       // 下一道题
       ArrayList<XMLNewsMessage.Article> articles = subjectService.getNextSubject(msg.getFromUserName());
       if (articles.size() > 0) {
