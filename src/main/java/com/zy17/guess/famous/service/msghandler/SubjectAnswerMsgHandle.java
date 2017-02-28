@@ -96,7 +96,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
       } else {
         // 回复此次主题的结果 todo
         long total = answerRepository.countByOpenId(openid);
-        long right = answerRepository.countByOpenIdResult(openid, true);
+        long right = answerRepository.countByOpenIdAndResult(openid, true);
 
         resp = new XMLTextMessage(
             openid,

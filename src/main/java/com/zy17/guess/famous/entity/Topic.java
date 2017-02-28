@@ -2,6 +2,8 @@ package com.zy17.guess.famous.entity;
 
 import lombok.Data;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +16,8 @@ import javax.persistence.Id;
 @Entity
 public class Topic extends BaseEntity {
   @Id
-  @GeneratedValue
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String topicId;
 
   // 主题名称
