@@ -15,7 +15,7 @@ import javax.persistence.Id;
 public class Topic extends BaseEntity {
   @Id
   @GeneratedValue
-  private long topicId;
+  private String topicId;
 
   // 主题名称
   private String topicName;

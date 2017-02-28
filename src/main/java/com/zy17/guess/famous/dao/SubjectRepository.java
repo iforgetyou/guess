@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface SubjectRepository extends JpaRepository<Subject, Long> {
-  Page<Subject> findAllBySubjectIdGreaterThan(long subjectId, Pageable pageable);
+public interface SubjectRepository extends JpaRepository<Subject, String> {
+  Page<Subject> findAllBySubjectIdGreaterThan(String subjectId, Pageable pageable);
 }

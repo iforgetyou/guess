@@ -16,9 +16,9 @@ import javax.persistence.Id;
 public class Subject extends BaseEntity {
   @Id
   @GeneratedValue
-  private long subjectId;
+  private String subjectId;
   @Column(nullable = false)
-  private long topicId;
+  private String topicId;
   // 名人id
   private String celebrityId;
   // 名人头像

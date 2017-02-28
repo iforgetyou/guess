@@ -22,12 +22,13 @@ public class FirstLoginHandle implements WeixinMsgHandle {
   WeixinUserRepository dao;
 
   public static final String HELP = ""
-      + "  猜图 -> 输入 \"1\"\n"
-      + "  答案 -> 输入 \"2\"\n"
+      + "  猜图 -> 输入 \"0\"\n"
+//      + "  答案 -> 输入 \"2\"\n"
 //      + "  清除历史成绩 -> 回复\"3\"\"\n"
-      + "  搜图 -> 输入标签即可\n"
-      + "  传图 -> 传图片后加标签\n\n"
-      + "  会定期审核图片，发现违法图片立即删除";
+//      + "  搜图 -> 输入标签即可\n"
+//      + "  传图 -> 传图片后加标签\n\n"
+      + "  会定期审核图片，发现违法图片立即删除\n"
+      + "  有什么需要改进，多跟我们交流，我们持续改进";
 
   @Override
   public boolean canHandle(EventMessage msg) {

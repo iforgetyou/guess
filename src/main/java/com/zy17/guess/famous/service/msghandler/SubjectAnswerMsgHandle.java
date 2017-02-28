@@ -43,6 +43,8 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   SubjectRepository subjectRepository;
   @Autowired
   SubjectService subjectService;
+  @Autowired
+  AnswerRepository answerRepository;
 
   private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中", "要不回复2看下答案?"};
   private Random random = new Random();
@@ -50,11 +52,14 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   @Override
   public boolean canHandle(EventMessage msg) {
     if (msg.getMsgType().equals(MsgType.TEXT.getValue())) {
+
       String key = CacheService.getSubjectKey(msg.getFromUserName());
       Object subjectId = cache.get(key);
       if (subjectId != null) {
+        // 有未完成题目
         return true;
       }
+
     }
     return false;
   }
@@ -63,33 +68,54 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   public XMLMessage handleMsg(EventMessage msg) {
     // 缓存中获取上次发送的图片
     XMLMessage resp = null;
+    if (msg.getContent().length() == 1 && "1234".contains(msg.getContent())) {
+      // 必须是1234其中之一 todo
+    }
 
-    String key = CacheService.getSubjectKey(msg.getFromUserName());
-    long subjectId = (long) cache.get(key);
+    String openid = msg.getFromUserName();
+    String key = CacheService.getSubjectKey(openid);
+    String subjectId = (String) cache.get(key);
+
+    Answer answer = new Answer();
+    answer.setOpenId(openid);
+    answer.setQuestionId(subjectId);
+    answer.setAnswer(msg.getContent());
 
     Subject subject = subjectRepository.findOne(subjectId);
 
     if (msg.getContent().equals(subject.getRightAnswer())) {
       // 回答正确
+      answer.setResult(true);
       // 下一道题
-      ArrayList<XMLNewsMessage.Article> articles = subjectService.getNextSubject(msg.getFromUserName());
+      ArrayList<XMLNewsMessage.Article> articles = subjectService.getNextSubject(openid);
       if (articles.size() > 0) {
         resp = new XMLNewsMessage(
-            msg.getFromUserName(),
+            openid,
             msg.getToUserName(),
             articles);
       } else {
         // 回复此次主题的结果 todo
+        long total = answerRepository.countByOpenId(openid);
+        long right = answerRepository.countByOpenIdResult(openid, true);
+
+        resp = new XMLTextMessage(
+            openid,
+            msg.getToUserName(),
+            "恭喜您，题目全部答完~\n"
+                + "答对 " + right + "/" + total + " 题"
+        );
       }
     } else {
       // 回答错误
       String content = wrongHit[random.nextInt(wrongHit.length - 1)];
       resp = new XMLTextMessage(
-          msg.getFromUserName(),
+          openid,
           msg.getToUserName(),
           content
       );
     }
+    // 记录答题结果
+    answerRepository.save(answer);
     return resp;
   }
 }

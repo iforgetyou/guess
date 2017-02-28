@@ -16,4 +16,8 @@ public interface AnswerRepository extends JpaRepository<Answer, String> {
    */
   @Query(value = "select questionId from Answer v where open_id=? group by v.questionId")
   List<String> findHisAnswersByOpenid(String openid);
+
+  long countByOpenId(String openid);
+
+  long countByOpenIdResult(String openid, boolean result);
 }

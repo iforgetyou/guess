@@ -32,9 +32,9 @@ public class SubjectService {
 
     Pageable pageable = new PageRequest(0, 1);
     String key = CacheService.getSubjectKey(fromUserName);
-    long lastId = 0;
+    String lastId = "";
     if (cacheService.get(key) != null) {
-      lastId = (long) cacheService.pop(key);
+      lastId = (String) cacheService.pop(key);
     }
     Page<Subject> subjects = subjectRepository.findAllBySubjectIdGreaterThan(lastId, pageable);
     if (subjects.getTotalElements() > 0) {

@@ -7,7 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum CMDType {
-  SEARCH("1"), ANSWER("2");
+  SEARCH("0"), ANSWER("2");
 
   private String value;
 
