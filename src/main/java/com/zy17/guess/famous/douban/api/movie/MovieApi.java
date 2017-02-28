@@ -27,6 +27,6 @@ public class MovieApi extends BaseAPI {
     if (count < 1) {
       count = BaseAPI.DEFAULT_COUNT;
     }
-    return restTemplate.getForObject(BASE_URI + SEARCH_URL, MovieSearchResult.class, query, tag, start, count);
+    return restTemplate.getForObject(API_URI + SEARCH_URL, MovieSearchResult.class, query, tag, start, count);
   }
 }

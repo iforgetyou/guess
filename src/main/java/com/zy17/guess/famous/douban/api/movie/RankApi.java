@@ -6,7 +6,6 @@ import com.zy17.guess.famous.douban.bean.MovieTop250Result;
 import com.zy17.guess.famous.douban.bean.UsBoxResult;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * 榜单api
@@ -25,7 +24,7 @@ public class RankApi extends BaseAPI {
    * @return
    */
   public UsBoxResult usboxRank() {
-    return restTemplate.getForObject(BASE_URI + US_BOX_URL, UsBoxResult.class);
+    return restTemplate.getForObject(API_URI + US_BOX_URL, UsBoxResult.class);
   }
 
   /**
@@ -33,6 +32,6 @@ public class RankApi extends BaseAPI {
    * @return
    */
   public MovieTop250Result top250Rank(int start, int count) {
-    return restTemplate.getForObject(BASE_URI + TOP_250_URL, MovieTop250Result.class, start, count);
+    return restTemplate.getForObject(API_URI + TOP_250_URL, MovieTop250Result.class, start, count);
   }
 }

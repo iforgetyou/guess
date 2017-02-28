@@ -10,7 +10,8 @@ import org.apache.http.message.BasicHeader;
 import org.springframework.web.client.RestTemplate;
 
 public abstract class BaseAPI {
-  protected static final String BASE_URI = "https://api.douban.com";
+  protected static final String API_URI = "https://api.douban.com";
+  protected static final String MOVIE_URI = "https://movie.douban.com";
   protected static Header jsonHeader =
       new BasicHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
   protected static int DEFAULT_COUNT = 10;

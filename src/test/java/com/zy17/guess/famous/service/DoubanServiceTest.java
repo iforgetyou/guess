@@ -28,4 +28,11 @@ public class DoubanServiceTest extends SpringBootTestBase {
     doubanService.searchMovieByNameFromCache("胡歌");
   }
 
+  @Test
+  public void searchCelebrityTest() {
+    ArrayList<XMLNewsMessage.Article> famous = doubanService.searchCelebrity("伊万·麦克格雷格");
+    System.out.println(JSON.toJSONString(famous));
+    assertThat(famous.size()).isGreaterThan(0);
+  }
+
 }

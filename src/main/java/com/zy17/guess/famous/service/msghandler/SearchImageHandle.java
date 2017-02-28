@@ -55,6 +55,7 @@ public class SearchImageHandle implements WeixinMsgHandle {
   public XMLMessage handleMsg(EventMessage msg) {
     XMLMessage resp = null;
     long count = imageTagDao.countByTag(msg.getContent());
+    String userName = msg.getFromUserName();
     if (count > 0) {
       // 随机找到带有标签的图片，todo 处理过期的
       int page = new Random().nextInt((int) count);
@@ -73,16 +74,19 @@ public class SearchImageHandle implements WeixinMsgHandle {
       articles.addAll(doubanService.searchMovieByNameFromCache(imageTag.getTag()));
 
       resp = new XMLNewsMessage(
-          msg.getFromUserName(),
+          userName,
           msg.getToUserName(),
           articles
       );
     } else {
       resp = new XMLTextMessage(
-          msg.getFromUserName(),
+          userName,
           msg.getToUserName(),
           content
       );
+      // 提前把标签放入缓存，等下个图片添加后试用
+      String key = CacheService.getNoImageKey(userName);
+      cache.put(key, msg.getMsgId());
     }
 
     //回复

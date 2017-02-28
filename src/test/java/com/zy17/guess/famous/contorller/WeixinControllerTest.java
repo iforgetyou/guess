@@ -110,10 +110,9 @@ public class WeixinControllerTest {
 
   @Test
   public void cacheTest() throws InterruptedException {
-    String key = "test";
+    String key = "test1";
     cache.put(key, "value");
     Object value = cache.get(key);
-    Thread.sleep(40000);
     assertThat(value).isNotNull();
     Object pop = cache.pop(key);
     assertThat(pop).isNotNull();

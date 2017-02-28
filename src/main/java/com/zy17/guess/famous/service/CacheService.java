@@ -35,7 +35,6 @@ public class CacheService {
     this.cache.put(key, value);
   }
 
-
   public Object get(String key) {
     Object result = null;
     try {
@@ -65,8 +64,21 @@ public class CacheService {
     return username + "_tag";
   }
 
-  // 已经发送随机图片
+  /**
+   * 已经发送随机图片
+   * key username_Q
+   * value list :imageMsgId
+   * @param username
+   * @return
+   */
   public static String getQuestionKey(String username) {
     return username + "_Q";
+  }
+
+  public static String getNoImageKey(String username) {
+    return username + "_no_image";
+  }
+  public static String getSubjectKey(String username) {
+    return username + "_sub";
   }
 }

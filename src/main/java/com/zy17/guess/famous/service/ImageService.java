@@ -10,7 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,22 +35,16 @@ public class ImageService {
 
   public XMLMessage getRandomImage(String fromUser, String toUser) {
     long count = imageTagRepository.count();
-//    long count = repository.countAllByMsgType(MsgType.IMAGE.getValue());
     if (count == 0) {
       //  还没有任何图片
       return null;
     }
-    // 查看缓存，找到已经发送过的图片
     String key = CacheService.getQuestionKey(fromUser);
-    Map<String, String> o = (Map<String, String>) cache.get(key);
-    Collection<String> values = o.values();
     // 随机从找一张用户传图
     Pageable pageable = new PageRequest(random.nextInt((int) count), 1);
     Page<ImageTag> all = imageTagRepository.findAll(pageable);
     ImageTag imageTag = all.getContent().get(0);
-
     // 图片放入缓存
-
     cache.put(key, imageTag.getImageMsgId());
 
     // 创建回复

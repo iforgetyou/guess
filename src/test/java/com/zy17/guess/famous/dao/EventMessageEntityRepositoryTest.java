@@ -25,10 +25,8 @@ import java.util.Random;
 @DataJpaTest
 public class EventMessageEntityRepositoryTest {
 
-
   @Autowired
   private TestEntityManager entityManager;
-
   @Autowired
   private EventMessageRepository repository;
   @Autowired

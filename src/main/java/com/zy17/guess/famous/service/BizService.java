@@ -2,12 +2,16 @@ package com.zy17.guess.famous.service;
 
 import com.zy17.guess.famous.service.msghandler.AnswerMsgHandle;
 import com.zy17.guess.famous.service.msghandler.DefaultMsgHandle;
+import com.zy17.guess.famous.service.msghandler.FindSubjectMsgHandle;
+import com.zy17.guess.famous.service.msghandler.FindTopicMsgHandle;
 import com.zy17.guess.famous.service.msghandler.FirstLoginHandle;
 import com.zy17.guess.famous.service.msghandler.ImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.PersistMsgHandle;
 import com.zy17.guess.famous.service.msghandler.RandomImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.SearchImageHandle;
+import com.zy17.guess.famous.service.msghandler.SubjectAnswerMsgHandle;
 import com.zy17.guess.famous.service.msghandler.TagMsgHandle;
+import com.zy17.guess.famous.service.msghandler.TestRespMsgHandle;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,26 +34,35 @@ public class BizService {
   List<WeixinMsgHandle> handlers = new ArrayList<>();
 
   public BizService(
+      @Autowired TestRespMsgHandle testRespMsgHandle,
       @Autowired ImageMsgHandle imageMsgHandle,
       @Autowired FirstLoginHandle firstLoginHandle,
       @Autowired RandomImageMsgHandle randomImageMsgHandle,
+      @Autowired FindTopicMsgHandle findTopicMsgHandle,
+      @Autowired FindSubjectMsgHandle findSubjectMsgHandle,
       @Autowired AnswerMsgHandle answerMsgHandle,
+      @Autowired SubjectAnswerMsgHandle subjectAnswerMsgHandle,
       @Autowired TagMsgHandle tagMsgHandle,
       @Autowired SearchImageHandle searchImageHandle,
       @Autowired PersistMsgHandle persistMsgHandle,
       @Autowired DefaultMsgHandle defaultMsgHandle
   ) {
+//    handlers.add(testRespMsgHandle);
     handlers.add(persistMsgHandle);
     handlers.add(firstLoginHandle);
-    handlers.add(imageMsgHandle);
+//    handlers.add(imageMsgHandle);
     // 文字处理开始
-    handlers.add(randomImageMsgHandle);
-    handlers.add(answerMsgHandle);
-    handlers.add(tagMsgHandle);
-    handlers.add(searchImageHandle);
+    handlers.add(findSubjectMsgHandle);
+    handlers.add(subjectAnswerMsgHandle);
+//    handlers.add(randomImageMsgHandle);
+//    handlers.add(answerMsgHandle);
+//    handlers.add(findTopicMsgHandle);
+//    handlers.add(tagMsgHandle);
+//    handlers.add(searchImageHandle);
     // 文字处理结束
     handlers.add(defaultMsgHandle);
   }
+
 
   public XMLMessage handleEvent(EventMessage req) {
     XMLMessage resp = null;
