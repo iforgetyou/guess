@@ -1,6 +1,8 @@
 package com.zy17.guess.famous.service;
 
 
+import java.net.URISyntaxException;
+
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 
@@ -20,5 +22,5 @@ public interface WeixinMsgHandle {
    * @param msg
    * @return
    */
-  XMLMessage handleMsg(EventMessage msg);
+  XMLMessage handleMsg(EventMessage msg) throws Exception;
 }

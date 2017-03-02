@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import weixin.popular.bean.message.EventMessage;
@@ -38,7 +39,7 @@ public class FindSubjectMsgHandle implements WeixinMsgHandle {
   }
 
   @Override
-  public XMLMessage handleMsg(EventMessage msg) {
+  public XMLMessage handleMsg(EventMessage msg) throws Exception {
     XMLMessage resp = null;
     ArrayList<XMLNewsMessage.Article> articles = subjectService.getNextSubject(msg.getFromUserName());
     if (articles.size() > 0) {

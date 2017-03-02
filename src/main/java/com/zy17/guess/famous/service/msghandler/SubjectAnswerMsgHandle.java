@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   }
 
   @Override
-  public XMLMessage handleMsg(EventMessage msg) {
+  public XMLMessage handleMsg(EventMessage msg) throws Exception {
     // 缓存中获取上次发送的图片
     XMLMessage resp = null;
     if (msg.getContent().length() == 1 && "1234".contains(msg.getContent())) {
@@ -94,7 +95,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
             msg.getToUserName(),
             articles);
       } else {
-        // 回复此次主题的结果 todo
+        // 回复此次主题的结果
         long total = answerRepository.countByOpenId(openid);
         long right = answerRepository.countByOpenIdAndResult(openid, true);
 
