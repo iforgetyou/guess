@@ -21,7 +21,8 @@ public class CelebrityApiTest extends SpringBootTestBase {
 
   @Test
   public void findCelebrityById() throws Exception {
-
+    CelebrityResult celebrities = api.findCelebrityById("1054437");
+    System.out.println(JSON.toJSONString(celebrities));
   }
 
   @Test
@@ -33,10 +34,11 @@ public class CelebrityApiTest extends SpringBootTestBase {
         URI uri = new URI(result.getUrl());
         String path = uri.getPath();
         String[] split = path.split("/");
-        System.out.println(split[split.length-1]);
+        System.out.println(split[split.length - 1]);
 //        api.findCelebrityById(uri.getQuery())
       }
     }
   }
+
 
 }

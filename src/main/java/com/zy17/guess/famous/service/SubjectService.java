@@ -54,25 +54,26 @@ public class SubjectService {
       subject.setTitle(sub.getDescription());
       subject.setDescription(sub.getDescription());
       subject.setPicurl(sub.getAvatar());
-      URIBuilder uri = new URIBuilder(baseUrl + IMAGE_SERVICE_PATH);
-      uri.addParameter("id", sub.getSubjectId());
-      subject.setUrl(uri.build().toString());
+//      URIBuilder uri = new URIBuilder(baseUrl + IMAGE_SERVICE_PATH);
+//      uri.addParameter("id", sub.getSubjectId());
+//      subject.setUrl(uri.build().toString());
+      subject.setUrl(sub.getCelebrityUrl());
       articles.add(subject);
 
       XMLNewsMessage.Article A = new XMLNewsMessage.Article();
-      A.setTitle("回复1. " + sub.getAnswerA());
+      A.setTitle("回复1: " + sub.getAnswerA());
       articles.add(A);
 
       XMLNewsMessage.Article B = new XMLNewsMessage.Article();
-      B.setTitle("回复2. " + sub.getAnswerB());
+      B.setTitle("回复2: " + sub.getAnswerB());
       articles.add(B);
 
       XMLNewsMessage.Article C = new XMLNewsMessage.Article();
-      C.setTitle("回复3. " + sub.getAnswerC());
+      C.setTitle("回复3: " + sub.getAnswerC());
       articles.add(C);
 
       XMLNewsMessage.Article D = new XMLNewsMessage.Article();
-      D.setTitle("回复4. " + sub.getAnswerD());
+      D.setTitle("回复4: " + sub.getAnswerD());
       articles.add(D);
 
       // 放入缓存
