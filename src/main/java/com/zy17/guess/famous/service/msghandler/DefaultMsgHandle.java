@@ -14,7 +14,7 @@ import weixin.popular.bean.xmlmessage.XMLTextMessage;
  */
 @Component
 public class DefaultMsgHandle implements WeixinMsgHandle {
-  public static final String DEFAULT = "消息已收到,功能仍在完善,请持续关注^-^";
+  public static final String DEFAULT = "消息已收到,功能仍在完善,请持续关注^-^\n" + FirstLoginHandle.HELP;
 
   @Override
   public boolean canHandle(EventMessage msg) {

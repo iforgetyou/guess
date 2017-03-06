@@ -47,7 +47,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   @Autowired
   AnswerRepository answerRepository;
 
-  private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中", "要不回复2看下答案?"};
+  private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中","加油","求助下朋友？"};
   private Random random = new Random();
 
   @Override
