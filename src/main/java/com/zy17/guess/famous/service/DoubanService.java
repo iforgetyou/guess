@@ -37,6 +37,10 @@ public class DoubanService {
   @Autowired
   CelebrityApi celebrityApi;
 
+  public CelebrityResult findByid(String id) {
+    return celebrityApi.findCelebrityById(id);
+  }
+
   /**
    * 豆瓣影人作品搜索
    * @param name
