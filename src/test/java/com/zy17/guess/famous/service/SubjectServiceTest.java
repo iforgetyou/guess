@@ -1,7 +1,6 @@
 package com.zy17.guess.famous.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import com.alibaba.fastjson.JSON;
 import com.zy17.guess.famous.SpringBootTestBase;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 
 /**
- * 2017/2/28 yanzhang153
+ * 2017/2/28 zy17
  */
 public class SubjectServiceTest extends SpringBootTestBase {
   @Autowired

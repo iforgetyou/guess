@@ -14,12 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLNewsMessage;
-import weixin.popular.bean.xmlmessage.XMLTextMessage;
 
 /**
  * 主题选择
@@ -36,7 +35,6 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
   @Override
   public boolean canHandle(EventMessage msg) {
     String cmd = msg.getContent();
-    //
     if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && cmd.equals(CMDType.SEARCH.getValue())) {
       return true;
     }
@@ -46,20 +44,22 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
   @Override
   public XMLMessage handleMsg(EventMessage msg) {
     XMLMessage resp = null;
-    Pageable pageable = new PageRequest(1, 5);
+    Pageable pageable = new PageRequest(0, 10);
     Page<Topic> topics = topicRepository.findAll(pageable);
 
     if (topics.getSize() > 0) {
       // 创建图文消息,提示用户图片对应的标签?
       ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
-
-      for (Topic topic : topics) {
+      HashMap<String, String> cacheValue = new HashMap<>();
+      for (int i = 0; i < topics.getSize(); i++) {
+        Topic topic = topics.getContent().get(i);
         XMLNewsMessage.Article a = new XMLNewsMessage.Article();
         a.setTitle(topic.getTopicName());
-        a.setDescription(topic.getDescription());
+        a.setDescription("回复" + (i + 1) + ": " + topic.getDescription());
         a.setPicurl(topic.getCoverImageUrl());
         a.setUrl(topic.getDetailUrl());
         articles.add(a);
+        cacheValue.put(String.valueOf(i), topic.getTopicId());
       }
 
       resp = new XMLNewsMessage(
@@ -67,6 +67,9 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
           msg.getToUserName(),
           articles
       );
+
+      String key = cacheService.getTopicKey(msg.getFromUserName());
+      cacheService.put(key, cacheValue);
     }
     //回复
     return resp;

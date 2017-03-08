@@ -52,11 +52,11 @@ public class BizService {
     handlers.add(firstLoginHandle);
 //    handlers.add(imageMsgHandle);
     // 文字处理开始
+    handlers.add(findTopicMsgHandle);
     handlers.add(findSubjectMsgHandle);
     handlers.add(subjectAnswerMsgHandle);
 //    handlers.add(randomImageMsgHandle);
 //    handlers.add(answerMsgHandle);
-//    handlers.add(findTopicMsgHandle);
 //    handlers.add(tagMsgHandle);
 //    handlers.add(searchImageHandle);
     // 文字处理结束
@@ -71,7 +71,9 @@ public class BizService {
       for (WeixinMsgHandle handler : handlers) {
         if (handler.canHandle(req)) {
           resp = handler.handleMsg(req);
+
           if (resp != null) {
+            log.info("handler:{},msg:{}", handler.getClass().getSimpleName(), req.getMsgId());
             return resp;
           }
         }

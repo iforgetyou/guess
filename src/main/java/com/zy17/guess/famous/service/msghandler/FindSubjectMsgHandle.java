@@ -1,20 +1,15 @@
 package com.zy17.guess.famous.service.msghandler;
 
-import com.zy17.guess.famous.entity.Subject;
-import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
 import com.zy17.guess.famous.service.SubjectService;
 import com.zy17.guess.famous.service.WeixinMsgHandle;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
@@ -27,12 +22,14 @@ import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 public class FindSubjectMsgHandle implements WeixinMsgHandle {
   @Autowired
   SubjectService subjectService;
-
+  @Autowired
+  CacheService cacheService;
 
   @Override
   public boolean canHandle(EventMessage msg) {
-    String cmd = msg.getContent();
-    if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && cmd.equals(CMDType.SEARCH.getValue())) {
+    String key = cacheService.getTopicKey(msg.getFromUserName());
+    if (msg.getMsgType().equals(MsgType.TEXT.getValue()) && cacheService.get(key) != null) {
+      // 已经选择topic
       return true;
     }
     return false;
@@ -40,6 +37,11 @@ public class FindSubjectMsgHandle implements WeixinMsgHandle {
 
   @Override
   public XMLMessage handleMsg(EventMessage msg) throws Exception {
+    String key = cacheService.getTopicKey(msg.getFromUserName());
+    Map<String, String> topicIds = (Map<String, String>) cacheService.pop(key);
+    String topicId = topicIds.get(msg.getContent());
+    String topicKeyId = cacheService.getTopicKeyId(msg.getFromUserName());
+    cacheService.put(topicKeyId, topicId);
     XMLMessage resp = null;
     ArrayList<XMLNewsMessage.Article> articles = subjectService.getNextSubject(msg.getFromUserName());
     if (articles.size() > 0) {

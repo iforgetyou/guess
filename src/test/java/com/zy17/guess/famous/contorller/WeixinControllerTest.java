@@ -3,36 +3,27 @@ package com.zy17.guess.famous.contorller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.zy17.guess.famous.EventGen;
+import com.zy17.guess.famous.SpringBootTestBase;
 import com.zy17.guess.famous.service.CacheService;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.user.FollowResult;
 import weixin.popular.support.TokenManager;
-import weixin.popular.util.SignatureUtil;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WeixinControllerTest {
+public class WeixinControllerTest extends SpringBootTestBase {
 
-  @Value("${weixin.token}")
-  private String token;
 
   @Autowired
   CacheService cache;
@@ -58,11 +49,11 @@ public class WeixinControllerTest {
   @Test
   public void echo() {
     System.out.println(token);
-    String body = this.restTemplate.getForObject(getUrl(), String.class);
+    String body = this.restTemplate.getForObject(getUrl() + "&echostr=1", String.class);
     assertThat(body).isEqualTo("1");
   }
 
-//  @Test
+  //  @Test
   public void RandomCmdMessageTest() {
     // 发送一张图片
     EventMessage imageEvent = EventGen.getImageEvent();
@@ -76,7 +67,7 @@ public class WeixinControllerTest {
     assertThat(body.contains(imageEvent.getMediaId()));
   }
 
-//  @Test
+  //  @Test
   public void imageAddTagTest() {
     // 发送一张图片
     EventMessage imageEvent = EventGen.getImageEvent();
@@ -96,7 +87,7 @@ public class WeixinControllerTest {
     System.out.println(body);
   }
 
-//  @Test
+  //  @Test
   public void AnswerTest() {
     restTemplate.postForObject(getUrl(), EventGen.getImageEvent(), String.class);
     restTemplate.postForObject(getUrl(), EventGen.getTextEvent("这是真标签"), String.class);
@@ -108,7 +99,7 @@ public class WeixinControllerTest {
     assertThat(a).contains("picurl").contains("");
   }
 
-//  @Test
+  //  @Test
   public void cacheTest() throws InterruptedException {
     String key = "test1";
     cache.put(key, "value");
@@ -125,15 +116,6 @@ public class WeixinControllerTest {
     for (String id : followResult.getData().getOpenid()) {
       System.out.println(id);
     }
-  }
-
-  public String getUrl() {
-    String timestamp = String.valueOf(System.currentTimeMillis());
-    String nonce = String.valueOf(new Random().nextInt());
-    String signature = SignatureUtil.generateEventMessageSignature(token, timestamp, nonce);
-    String url = "/weixin?signature=" + signature + "&timestamp=" + timestamp + "&nonce=" + nonce + "&echostr=1";
-    System.out.println(url);
-    return url;
   }
 
 

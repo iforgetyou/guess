@@ -1,18 +1,11 @@
 package com.zy17.guess.famous.service.msghandler;
 
 import com.zy17.guess.famous.dao.AnswerRepository;
-import com.zy17.guess.famous.dao.EventMessageRepository;
-import com.zy17.guess.famous.dao.ImageTagRepository;
 import com.zy17.guess.famous.dao.SubjectRepository;
 import com.zy17.guess.famous.entity.Answer;
-import com.zy17.guess.famous.entity.EventMessageEntity;
-import com.zy17.guess.famous.entity.ImageTag;
 import com.zy17.guess.famous.entity.Subject;
-import com.zy17.guess.famous.other.CMDType;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
-import com.zy17.guess.famous.service.DoubanService;
-import com.zy17.guess.famous.service.ImageService;
 import com.zy17.guess.famous.service.SubjectService;
 import com.zy17.guess.famous.service.WeixinMsgHandle;
 
@@ -21,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -47,7 +39,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   @Autowired
   AnswerRepository answerRepository;
 
-  private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中","加油","求助下朋友？"};
+  private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中", "加油", "求助下朋友？"};
   private Random random = new Random();
 
   @Override

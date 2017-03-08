@@ -78,6 +78,15 @@ public class CacheService {
   public static String getNoImageKey(String username) {
     return username + "_no_image";
   }
+
+  // value map<选项，topicId>
+  public static String getTopicKey(String username) {
+    return username + "_tpc";
+  }
+  public static String getTopicKeyId(String username) {
+    return username + "_tpcId";
+  }
+
   public static String getSubjectKey(String username) {
     return username + "_sub";
   }
