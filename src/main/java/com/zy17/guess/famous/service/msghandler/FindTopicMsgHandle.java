@@ -59,7 +59,7 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
         a.setPicurl(topic.getCoverImageUrl());
         a.setUrl(topic.getDetailUrl());
         articles.add(a);
-        cacheValue.put(String.valueOf(i), topic.getTopicId());
+        cacheValue.put(String.valueOf((i + 1)), topic.getTopicId());
       }
 
       resp = new XMLNewsMessage(
