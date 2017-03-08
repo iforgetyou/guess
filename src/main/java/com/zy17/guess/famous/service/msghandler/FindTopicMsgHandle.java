@@ -51,7 +51,7 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
       // 创建图文消息,提示用户图片对应的标签?
       ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
       HashMap<String, String> cacheValue = new HashMap<>();
-      for (int i = 0; i < topics.getSize(); i++) {
+      for (int i = 0; i < topics.getContent().size(); i++) {
         Topic topic = topics.getContent().get(i);
         XMLNewsMessage.Article a = new XMLNewsMessage.Article();
         a.setTitle(topic.getTopicName());
