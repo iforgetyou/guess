@@ -16,8 +16,8 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/image")
-public class ImageController {
+@RequestMapping("/subject")
+public class SubjectController {
   @Autowired
   SubjectRepository subjectRepository;
 

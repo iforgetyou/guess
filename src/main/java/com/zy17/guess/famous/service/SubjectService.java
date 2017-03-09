@@ -33,6 +33,8 @@ public class SubjectService {
 
   @Value("${image.base.url}")
   String baseUrl;
+  @Value("${image.direct}")
+  boolean imageDirect;
 
 
   public ArrayList<XMLNewsMessage.Article> getNextSubject(String fromUserName) throws URISyntaxException {
@@ -54,7 +56,11 @@ public class SubjectService {
       subject.setTitle(sub.getDescription());
       subject.setDescription(sub.getDescription());
       subject.setPicurl(sub.getAvatar());
-      subject.setUrl(sub.getCelebrityUrl());
+      if (imageDirect) {
+        subject.setUrl(sub.getCelebrityUrl());
+      } else {
+        subject.setUrl(baseUrl + "/subject?id=" + sub.getSubjectId());
+      }
       articles.add(subject);
 
       XMLNewsMessage.Article A = new XMLNewsMessage.Article();
