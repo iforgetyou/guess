@@ -77,7 +77,7 @@ public class ImageMsgHandle implements WeixinMsgHandle {
       image.setDescription(DESCRIPTION);
       articles.add(image);
 
-      articles.addAll(doubanService.searchMovieByNameFromCache(tagMsg.getContent()));
+      articles.addAll(doubanService.searchMovieByName(tagMsg.getContent()));
 
       resp = new XMLNewsMessage(
           msg.getFromUserName(),

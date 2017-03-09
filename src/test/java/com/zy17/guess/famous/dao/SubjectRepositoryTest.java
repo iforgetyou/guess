@@ -1,5 +1,7 @@
 package com.zy17.guess.famous.dao;
 
+import com.alibaba.fastjson.JSON;
+import com.zy17.guess.famous.SpringBootTestBase;
 import com.zy17.guess.famous.entity.Subject;
 
 import org.junit.Test;
@@ -14,23 +16,40 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * 2017/3/8 zy17
  */
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class SubjectRepositoryTest {
+public class SubjectRepositoryTest extends SpringBootTestBase{
   @Autowired
   TopicRepository topicRepository;
   @Autowired
   SubjectRepository subjectRepository;
 
+
   @Test
   public void findAllByTopicIdAndSubjectIdGreaterThan() throws Exception {
-    Subject entity = new Subject();
     String topicId = "topicId";
-    entity.setTopicId(topicId);
-    subjectRepository.save(entity);
+    Subject subject = new Subject();
+    subject.setTopicId(topicId);
+    subject.setAnswerA("A");
+    subject.setAnswerB("B");
+    subject.setAnswerC("C");
+    subject.setAnswerD("D");
+    subject.setCelebrityId("");
+    subject.setAvatar("avatarurl");
+    subject.setCelebrityUrl("");
+    subject.setDescription("");
+    subject.setRightAnswer("");
+
+
+    System.out.println(JSON.toJSONString(subject));
+    subjectRepository.save(subject);
     Pageable pageable = new PageRequest(0, 1);
     Page<Subject> allByTopicIdAndSubjectIdGreaterThan = subjectRepository.findAllByTopicIdAndSubjectIdGreaterThan(topicId, "", pageable);
     System.out.println(allByTopicIdAndSubjectIdGreaterThan);
+    for (int i = 0; i < 10; i++) {
+      subjectRepository.findOne(subject.getSubjectId());
+//      System.out.println(one);
+    }
+
   }
+
 
 }

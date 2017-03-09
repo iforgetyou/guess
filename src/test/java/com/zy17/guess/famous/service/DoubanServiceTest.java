@@ -22,10 +22,11 @@ public class DoubanServiceTest extends SpringBootTestBase {
 
   @Test
   public void searchMovieByName() throws Exception {
-    ArrayList<XMLNewsMessage.Article> famous = doubanService.searchMovieByNameFromCache("胡歌");
+    ArrayList<XMLNewsMessage.Article> famous = doubanService.searchMovieByName("胡歌");
     System.out.println(JSON.toJSONString(famous));
     assertThat(famous.size()).isGreaterThan(0);
-    doubanService.searchMovieByNameFromCache("胡歌");
+    doubanService.searchMovieByName("胡歌");
+    doubanService.searchMovieByName("胡歌");
   }
 
   @Test

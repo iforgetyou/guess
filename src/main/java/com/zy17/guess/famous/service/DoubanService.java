@@ -12,16 +12,11 @@ import com.zy17.guess.famous.douban.bean.SubjectSuggestResult;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 
@@ -46,8 +41,8 @@ public class DoubanService {
    * @param name
    * @return
    */
-  @Async
-  private Future<ArrayList<XMLNewsMessage.Article>> searchMovieByName(String name) {
+//  @Async
+  public ArrayList<XMLNewsMessage.Article> searchMovieByName(String name) {
     ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
     // 默认从豆瓣找3个结果
     MovieSearchResult movieSearchResult = movieApi.searchMovie(name, "", 0, 3);
@@ -62,22 +57,21 @@ public class DoubanService {
       articles.add(doubanDetail);
     }
 
-    return new AsyncResult<>(articles);
-  }
-
-  @Cacheable(value = "searchMovieByNameFromCache")
-  public ArrayList<XMLNewsMessage.Article> searchMovieByNameFromCache(String key) {
-    ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
-    try {
-      articles.addAll(searchMovieByName(key).get(2, TimeUnit.SECONDS));
-    } catch (Exception e) {
-      log.warn("searchMovieByNameFromCache:" + e.getMessage());
-    }
     return articles;
   }
 
 
-  @Cacheable(value = "searchCelebrity")
+//  public ArrayList<XMLNewsMessage.Article> searchMovieByNameFromCache(String key) {
+//    ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
+//    try {
+//      articles.addAll(searchMovieByName(key).get(2, TimeUnit.SECONDS));
+//    } catch (Exception e) {
+//      log.warn("searchMovieByNameFromCache:" + e.getMessage());
+//    }
+//    return articles;
+//  }
+
+
   public ArrayList<XMLNewsMessage.Article> searchCelebrity(String name) {
     SubjectSuggestResult[] results = celebrityApi.findCelebrityByName(name);
     log.info("findCelebrityByName result:{}", JSON.toJSONString(results));

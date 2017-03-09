@@ -76,6 +76,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
 
     Subject subject = subjectRepository.findOne(subjectId);
 
+
     if (msg.getContent().equals(subject.getRightAnswer())) {
       // 回答正确
       answer.setResult(true);

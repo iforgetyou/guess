@@ -24,7 +24,7 @@ import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 @Slf4j
 @Service
 public class SubjectService {
-  public static final String IMAGE_SERVICE_PATH = "/image";
+  public static final String IMAGE_SERVICE_PATH = "/subject?id=";
 
   @Autowired
   SubjectRepository subjectRepository;
@@ -59,7 +59,7 @@ public class SubjectService {
       if (imageDirect) {
         subject.setUrl(sub.getCelebrityUrl());
       } else {
-        subject.setUrl(baseUrl + "/subject?id=" + sub.getSubjectId());
+        subject.setUrl(baseUrl + IMAGE_SERVICE_PATH + sub.getSubjectId());
       }
       articles.add(subject);
 

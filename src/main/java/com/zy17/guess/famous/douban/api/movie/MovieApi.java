@@ -4,6 +4,7 @@ package com.zy17.guess.famous.douban.api.movie;
 import com.zy17.guess.famous.douban.api.BaseAPI;
 import com.zy17.guess.famous.douban.bean.MovieSearchResult;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +24,7 @@ public class MovieApi extends BaseAPI {
    * @param count int	Y	Y	Y	20
    * @return
    */
+  @Cacheable(value = "movie", key = "#p0+#p1")
   public MovieSearchResult searchMovie(String query, String tag, int start, int count) {
     if (count < 1) {
       count = BaseAPI.DEFAULT_COUNT;

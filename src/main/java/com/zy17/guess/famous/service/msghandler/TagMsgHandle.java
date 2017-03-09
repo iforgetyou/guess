@@ -72,7 +72,7 @@ public class TagMsgHandle implements WeixinMsgHandle {
     image.setDescription(DESCRIPTION);
     articles.add(image);
 
-    articles.addAll(doubanService.searchMovieByNameFromCache(msg.getContent()));
+    articles.addAll(doubanService.searchMovieByName(msg.getContent()));
 
     XMLMessage resp = new XMLNewsMessage(
         msg.getFromUserName(),

@@ -71,7 +71,7 @@ public class SearchImageHandle implements WeixinMsgHandle {
       articles.add(detail);
 
       // 加入豆瓣结果
-      articles.addAll(doubanService.searchMovieByNameFromCache(imageTag.getTag()));
+      articles.addAll(doubanService.searchMovieByName(imageTag.getTag()));
 
       resp = new XMLNewsMessage(
           userName,

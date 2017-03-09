@@ -5,6 +5,7 @@ import com.zy17.guess.famous.douban.api.BaseAPI;
 import com.zy17.guess.famous.douban.bean.CelebrityResult;
 import com.zy17.guess.famous.douban.bean.SubjectSuggestResult;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,6 +26,7 @@ public class CelebrityApi extends BaseAPI {
     return restTemplate.getForObject(API_URI + CELEBRITY_URL, CelebrityResult.class, celebrityId);
   }
 
+  @Cacheable(value = "searchCelebrity")
   public SubjectSuggestResult[] findCelebrityByName(String celebrityName) {
     return restTemplate.getForObject(MOVIE_URI + CELEBRITY_QUERY, SubjectSuggestResult[].class, celebrityName);
   }

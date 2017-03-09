@@ -91,7 +91,7 @@ public class AnswerMsgHandle implements WeixinMsgHandle {
         articles.add(answer);
 
         // 加入豆瓣结果
-        articles.addAll(doubanService.searchMovieByNameFromCache(imageTag.getTag()));
+        articles.addAll(doubanService.searchMovieByName(imageTag.getTag()));
 
         resp = new XMLNewsMessage(
             msg.getFromUserName(),
