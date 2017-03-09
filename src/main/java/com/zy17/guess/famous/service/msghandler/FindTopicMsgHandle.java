@@ -54,7 +54,7 @@ public class FindTopicMsgHandle implements WeixinMsgHandle {
       for (int i = 0; i < topics.getContent().size(); i++) {
         Topic topic = topics.getContent().get(i);
         XMLNewsMessage.Article a = new XMLNewsMessage.Article();
-        a.setTitle(topic.getTopicName());
+        a.setTitle("回复" + (i + 1) + ": " + topic.getTopicName());
         a.setDescription("回复" + (i + 1) + ": " + topic.getDescription());
         a.setPicurl(topic.getCoverImageUrl());
         a.setUrl(topic.getDetailUrl());
