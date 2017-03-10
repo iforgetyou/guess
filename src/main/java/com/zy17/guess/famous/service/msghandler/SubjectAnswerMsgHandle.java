@@ -1,8 +1,10 @@
 package com.zy17.guess.famous.service.msghandler;
 
 import com.zy17.guess.famous.dao.AnswerRepository;
+import com.zy17.guess.famous.dao.CelebrityRepository;
 import com.zy17.guess.famous.dao.SubjectRepository;
 import com.zy17.guess.famous.entity.Answer;
+import com.zy17.guess.famous.entity.Celebrity;
 import com.zy17.guess.famous.entity.Subject;
 import com.zy17.guess.famous.other.MsgType;
 import com.zy17.guess.famous.service.CacheService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import weixin.popular.bean.message.EventMessage;
@@ -38,6 +41,8 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
   SubjectService subjectService;
   @Autowired
   AnswerRepository answerRepository;
+  @Autowired
+  CelebrityRepository celebrityRepository;
 
   private String[] wrongHit = {"没猜中,再试试吧", "下次一定能猜中", "加油", "求助下朋友？"};
   private Random random = new Random();
@@ -101,11 +106,20 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
       }
     } else {
       // 回答错误
+      Celebrity celebrity = celebrityRepository.findOne(subject.getCelebrityId());
       String content = wrongHit[random.nextInt(wrongHit.length - 1)];
-      resp = new XMLTextMessage(
+      List<XMLNewsMessage.Article> news = new ArrayList<>();
+      XMLNewsMessage.Article article = new XMLNewsMessage.Article();
+      article.setTitle(content);
+      article.setUrl(celebrity.getAlt());
+      article.setDescription("点我！点我看答案");
+      article.setPicurl(celebrity.getAvatarL());
+
+      news.add(article);
+      resp = new XMLNewsMessage(
           openid,
           msg.getToUserName(),
-          content
+          news
       );
     }
     // 记录答题结果

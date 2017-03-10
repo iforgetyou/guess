@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URI;
 
 /**
- * 2017/2/27 yanzhang153
+ * 2017/2/27 zy17
  */
 public class CelebrityApiTest extends SpringBootTestBase {
   @Autowired

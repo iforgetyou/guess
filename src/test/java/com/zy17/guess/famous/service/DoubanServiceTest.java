@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 
 /**
- * 2017/2/25 yanzhang153
+ * 2017/2/25 zy17
  */
 public class DoubanServiceTest extends SpringBootTestBase {
   @Autowired
