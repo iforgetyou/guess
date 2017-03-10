@@ -35,6 +35,8 @@ public class SubjectService {
   String baseUrl;
   @Value("${image.direct}")
   boolean imageDirect;
+  @Value("${image.cloud.url}")
+  String imageCloudUrl;
 
 
   public ArrayList<XMLNewsMessage.Article> getNextSubject(String fromUserName) throws URISyntaxException {
@@ -55,10 +57,16 @@ public class SubjectService {
       XMLNewsMessage.Article subject = new XMLNewsMessage.Article();
       subject.setTitle(sub.getDescription());
       subject.setDescription(sub.getDescription());
-      subject.setPicurl(sub.getAvatar());
+      String avatarUrl = sub.getAvatar();
+      if (avatarUrl == null) {
+        avatarUrl = imageCloudUrl + "/" + sub.getSubjectId();
+      }
+      subject.setPicurl(avatarUrl);
       if (imageDirect) {
+        // 直接访问图片地址
         subject.setUrl(sub.getCelebrityUrl());
       } else {
+        // 中转图片
         subject.setUrl(baseUrl + IMAGE_SERVICE_PATH + sub.getSubjectId());
       }
       articles.add(subject);
