@@ -15,7 +15,6 @@ import weixin.popular.util.SignatureUtil;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
 public class SpringBootTestBase {
   @Value("${weixin.token}")
   protected String token;
