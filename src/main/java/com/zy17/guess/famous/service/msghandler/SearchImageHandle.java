@@ -67,7 +67,7 @@ public class SearchImageHandle implements WeixinMsgHandle {
       ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
       XMLNewsMessage.Article detail = new XMLNewsMessage.Article();
       detail.setTitle(imageTag.getTag());
-      detail.setPicurl(imageMsg.getPicUrl());
+      detail.setPicurl(imageMsg.getMsg().getPicUrl());
       articles.add(detail);
 
       // 加入豆瓣结果

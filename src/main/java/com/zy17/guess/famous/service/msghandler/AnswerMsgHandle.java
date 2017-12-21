@@ -87,7 +87,7 @@ public class AnswerMsgHandle implements WeixinMsgHandle {
         ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
         XMLNewsMessage.Article answer = new XMLNewsMessage.Article();
         answer.setTitle(imageTag.getTag());
-        answer.setPicurl(imageMsg.getPicUrl());
+        answer.setPicurl(imageMsg.getMsg().getPicUrl());
         articles.add(answer);
 
         // 加入豆瓣结果

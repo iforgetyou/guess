@@ -60,15 +60,15 @@ public class TagMsgHandle implements WeixinMsgHandle {
     imageTag.setTagMsgId(msg.getMsgId());
     imageTag.setTag(msg.getContent());
     imageTag.setImageMsgId(imageEntity.getMsgId());
-    imageTag.setImageMediaId(imageEntity.getMediaId());
+    imageTag.setImageMediaId(imageEntity.getMsg().getMediaId());
     imageTagDao.save(imageTag);
 
     // 创建图文消息,提示用户图片对应的标签?
     ArrayList<XMLNewsMessage.Article> articles = new ArrayList<>();
     XMLNewsMessage.Article image = new XMLNewsMessage.Article();
     image.setTitle(DEFAULT + ": " + msg.getContent());
-    image.setPicurl(imageEntity.getPicUrl());
-    image.setUrl(imageEntity.getUrl());
+    image.setPicurl(imageEntity.getMsg().getPicUrl());
+    image.setUrl(imageEntity.getMsg().getUrl());
     image.setDescription(DESCRIPTION);
     articles.add(image);
 

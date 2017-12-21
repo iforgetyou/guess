@@ -43,7 +43,8 @@ public class WeixinController {
   private String appId;
   @Value("${weixin.EncodingAESKey}")
   private String encodingAESKey;
-
+@Value("${weixin.checktoken}")
+boolean checkToken;
   @Autowired
   BizService bizService;
 
@@ -64,7 +65,7 @@ public class WeixinController {
       @RequestParam(required = false) String msg_signature,
       @RequestBody(required = false) EventMessage event) throws UnsupportedEncodingException {
     //验证请求签名
-    if (!signature.equals(SignatureUtil.generateEventMessageSignature(token, timestamp, nonce))) {
+    if (checkToken&&!signature.equals(SignatureUtil.generateEventMessageSignature(token, timestamp, nonce))) {
       log.warn("The request signature is invalid");
       return "signature check failed";
     }
@@ -93,7 +94,8 @@ public class WeixinController {
       // 非加密模式
       return echostr;
     }
-    log.info("request:signature={},timestamp={},nonce={},event={}", signature, timestamp, nonce, XMLConverUtil.convertToXML(event));
+    log.info("request:?signature={}&timestamp={}&nonce={},event={}", signature, timestamp, nonce, XMLConverUtil
+        .convertToXML(event));
 
     String key = event.getFromUserName() + "__"
         + event.getToUserName() + "__"

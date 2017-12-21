@@ -1,5 +1,7 @@
 target/
 logdir
+*.log
+*.pid
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

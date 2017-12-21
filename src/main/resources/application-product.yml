@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/guess
+    username: guess
+    password: guess
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ddl-auto: update
+  redis:
+    host: 127.0.0.1
+    port: 6379
+server:
+  port: 80
+
+
+weixin:
+  checktoken: true
+

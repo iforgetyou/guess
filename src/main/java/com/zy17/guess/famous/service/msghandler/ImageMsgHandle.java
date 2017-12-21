@@ -63,7 +63,7 @@ public class ImageMsgHandle implements WeixinMsgHandle {
       // 保存图片标签关系
       ImageTag imageTag = new ImageTag();
       imageTag.setTagMsgId(tagMsg.getMsgId());
-      imageTag.setTag(tagMsg.getContent());
+      imageTag.setTag(tagMsg.getMsg().getContent());
       imageTag.setImageMsgId(msg.getMsgId());
       imageTag.setImageMediaId(msg.getMediaId());
       imageTagDao.save(imageTag);
@@ -77,7 +77,7 @@ public class ImageMsgHandle implements WeixinMsgHandle {
       image.setDescription(DESCRIPTION);
       articles.add(image);
 
-      articles.addAll(doubanService.searchMovieByName(tagMsg.getContent()));
+      articles.addAll(doubanService.searchMovieByName(tagMsg.getMsg().getContent()));
 
       resp = new XMLNewsMessage(
           msg.getFromUserName(),

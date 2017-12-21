@@ -3,7 +3,7 @@ JARFile="./target/guess-0.0.1-SNAPSHOT.jar"
 PIDFile="guess.pid"
 SPRING_OPTS=""
 function check_if_pid_file_exists {
-	if [ ! -f $PIDFile ]
+	if [ ! -f ${PIDFile} ]
 	then
 		echo "PID file not found: $PIDFile"
 		exit 1
@@ -20,9 +20,9 @@ function check_if_process_is_running {
 }
 
 function print_process {
-	if [ -f $PIDFile ]
+	if [ -f ${PIDFile} ]
 	then
-    	echo $(<"$PIDFile")
+    	echo $(<"${PIDFile}")
 	fi
 }
 
@@ -55,7 +55,7 @@ else
 fi
 done
 echo
-if [ $NOT_KILLED = 1 ]
+if [ ${NOT_KILLED} = 1 ]
 then
 echo "Cannot kill process $(print_process)"
 exit 1
@@ -63,12 +63,12 @@ fi
 echo "Process stopped"
 ;;
 start)
-if [ -f $PIDFile ] && check_if_process_is_running
+if [ -f ${PIDFile} ] && check_if_process_is_running
 then
 echo "Process $(print_process) already running"
 exit 1
 fi
-nohup java $SPRING_OPTS -jar $JARFile &
+nohup java ${SPRING_OPTS} -jar ${JARFile} &
 echo "Process started"
 ;;
 restart)

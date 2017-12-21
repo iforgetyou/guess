@@ -81,6 +81,7 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
 
     Subject subject = subjectRepository.findOne(subjectId);
 
+    log.debug("找到主题:{}",subject);
 
     if (msg.getContent().equals(subject.getRightAnswer())) {
       // 回答正确
@@ -92,17 +93,6 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
             openid,
             msg.getToUserName(),
             articles);
-      } else {
-        // 回复此次主题的结果
-        long total = answerRepository.countByOpenId(openid);
-        long right = answerRepository.countByOpenIdAndResult(openid, true);
-
-        resp = new XMLTextMessage(
-            openid,
-            msg.getToUserName(),
-            "恭喜您，题目全部答完~\n"
-                + "答对 " + right + "/" + total + " 题"
-        );
       }
     } else {
       // 回答错误
@@ -122,8 +112,22 @@ public class SubjectAnswerMsgHandle implements WeixinMsgHandle {
           news
       );
     }
+
     // 记录答题结果
     answerRepository.save(answer);
+    if ( resp == null){
+      // 没错也没有下一题,回复结果
+      long total = answerRepository.countByOpenId(openid);
+      long right = answerRepository.countByOpenIdAndResult(openid, true);
+
+      resp = new XMLTextMessage(
+          openid,
+          msg.getToUserName(),
+          "恭喜您，题目全部答完~\n"
+              + "答对 " + right + "/" + total + " 题\n"
+          +"更多精彩敬请期待,分享给朋友支持下"
+      );
+    }
     return resp;
   }
 }

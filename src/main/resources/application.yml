@@ -1,0 +1,59 @@
+# Logging configuration
+logging:
+  file: ${LOGGING_FILE:guess}.log
+  path: ${LOGGING_PATH:${user.home}/caimingren/logs}
+  level:
+    org.springframework:
+      data: info
+      security: info
+
+server:
+#  http: 8080
+  port: 8080
+#  ssl:
+#    key-store: classpath:server.pkcs12
+#    key-store-password: spec_pass
+#    keyStoreType: PKCS12
+
+# Spring configuration
+spring:
+  jackson:
+      serialization:
+        INDENT_OUTPUT: true
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ddl-auto: validate
+  datasource:
+    dbcp:
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3600000
+      validation-query: SELECT 1
+  data.rest.basePath: /api
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+weixin:
+  appid: wxd1634667029f343a
+  secret: 01a0cab011cd7a937a2e1e24eb250fb1
+  token: omcUjifXTydnWzxUSwwtOClqa8luskvQ
+  EncodingAESKey: myEncodingAESKey
+  checktoken: false
+
+# custom
+image:
+  direct: false
+  cloud.url: http://127.0.0.1
+  base.url: http://127.0.0.1:${server.port}

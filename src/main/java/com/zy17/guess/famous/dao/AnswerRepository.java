@@ -14,12 +14,12 @@ public interface AnswerRepository extends JpaRepository<Answer, String> {
    * @param openId
    * @return
    */
-  @Query(value = "select questionId from Answer v where open_id=? group by v.questionId")
+  @Query(value = "select questionId from Answer v where open_id=?  group by v.questionId")
   List<String> findHisAnswersByOpenid(String openId);
 
-  @Query(value = "SELECT count(distinct questionId) FROM Answer where openId=?")
+  @Query(value = "SELECT count(distinct questionId) FROM Answer  where openId=? and created>to_days(now())")
   long countByOpenId(String openId);
 
-  @Query(value = "SELECT count(distinct questionId) FROM Answer where openId=? and result=?")
+  @Query(value = "SELECT count(distinct questionId) FROM Answer  where openId=? and result=? and created>to_days(now()) ")
   long countByOpenIdAndResult(String openId, boolean result);
 }

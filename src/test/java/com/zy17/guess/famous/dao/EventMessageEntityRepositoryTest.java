@@ -7,42 +7,18 @@ import com.zy17.guess.famous.entity.ImageTag;
 import com.zy17.guess.famous.other.MsgType;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Random;
 
 /**
  * 2017/2/22 zy17
  */
-@RunWith(SpringRunner.class)
-@DataJpaTest
-public class EventMessageEntityRepositoryTest {
-
-  @Autowired
-  private TestEntityManager entityManager;
-  @Autowired
-  private EventMessageRepository repository;
-  @Autowired
-  private ImageTagRepository tagDao;
-
-  @Test
-  public void testExample() throws Exception {
-
-    weixin.popular.bean.message.EventMessage msg = new weixin.popular.bean.message.EventMessage();
-    msg.setFromUserName("1");
-    msg.setMsgId("1");
-    EventMessageEntity entity = new EventMessageEntity(msg);
-    this.entityManager.persist(entity);
-    EventMessageEntity save = this.repository.save(entity);
-    assertThat(save.getMsgId()).isEqualTo("1");
-  }
+@ActiveProfiles("dev")
+public class EventMessageEntityRepositoryTest extends BaseRepositoryTest {
 
   @Test
   public void testPage() {
@@ -60,7 +36,7 @@ public class EventMessageEntityRepositoryTest {
     Pageable pageable = new PageRequest(new Random().nextInt((int) count), 1);
     Page<EventMessageEntity> all = repository.findAllByMsgType("image", pageable);
     System.out.println(all);
-    assertThat(save.getMsgId()).isEqualTo(all.getContent().get(0).getMediaId());
+    assertThat(save.getMsgId()).isEqualTo(all.getContent().get(0).getMsg().getMsgId());
   }
 
   @Test
