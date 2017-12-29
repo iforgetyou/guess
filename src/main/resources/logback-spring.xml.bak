@@ -1,0 +1,74 @@
+<configuration scan="true">
+    <property name="logHomePath" value="${user.dir}/guess/logs"/> <!-- 日志保存目录 -->
+    <property name="appName" value="guess"/><!-- 应用的名字 -->
+    <property name="maxSaveDays" value="365"/><!-- 日志最大保存天数 -->
+    <property name="maxFileSize" value="200MB"/><!-- 单个文件最大大小-->
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS}[%X{userId}|%X{X-B3-TraceId:-}][%p][%c{0}-%M]-%m%n"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{"yyyy-MM-dd HH:mm:ss,SSS"}[%X{userName}|%X{X-B3-TraceId:-}][%p] [%c{0}-%M]-%m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="rollingFileInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logHomePath}/${appName}-log-info-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="rollingFileError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logHomePath}/${appName}-log-error-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="rollingFileSql" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logHomePath}/${appName}-log-sql-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.zy17.guess" level="debug"/> <!-- 特定package日志级别 -->
+
+    <root level="error"><!-- 默认日志级别 -->
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="rollingFileInfo"/>
+        <appender-ref ref="rollingFileError"/>
+    </root>
+
+</configuration>

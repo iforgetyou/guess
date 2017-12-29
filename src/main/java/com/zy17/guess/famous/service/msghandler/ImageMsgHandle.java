@@ -13,6 +13,7 @@ import com.zy17.guess.famous.service.WeixinMsgHandle;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.ResponseCache;
@@ -41,6 +42,9 @@ public class ImageMsgHandle implements WeixinMsgHandle {
   DoubanService doubanService;
   @Autowired
   EventMessageRepository eventRepository;
+
+  @Value("${weixin.command.cache.expire}")
+  public int cacheTimeInMinutes;
 
   @Override
   public boolean canHandle(EventMessage msg) {
@@ -89,7 +93,7 @@ public class ImageMsgHandle implements WeixinMsgHandle {
       resp = new XMLTextMessage(
           userName,
           msg.getToUserName(),
-          "收到图片,请在 " + CacheService.cacheTimeInMinutes + " 分钟内添加文字标签\n");
+          "收到图片,请在 " + cacheTimeInMinutes + " 分钟内添加文字标签\n");
       // 缓存
       cache.put(CacheService.getNewImageKey(userName), msg.getMsgId());
     }

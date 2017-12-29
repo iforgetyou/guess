@@ -1,15 +1,21 @@
 # Logging configuration
 logging:
   file: ${LOGGING_FILE:guess}.log
-  path: ${LOGGING_PATH:${user.home}/caimingren/logs}
+  path: ${LOGGING_PATH:${user.home}/logs}
   level:
+    root: info
+    com.zy17: debug
     org.springframework:
       data: info
       security: info
 
 server:
-#  http: 8080
-  port: 8080
+  port: 443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: test
+    keyStoreType: PKCS12
+    keyAlias: guess
 #  ssl:
 #    key-store: classpath:server.pkcs12
 #    key-store-password: spec_pass
@@ -50,10 +56,11 @@ weixin:
   secret: 01a0cab011cd7a937a2e1e24eb250fb1
   token: omcUjifXTydnWzxUSwwtOClqa8luskvQ
   EncodingAESKey: myEncodingAESKey
-  checktoken: false
+  checktoken: true
+  command.cache.expire: 10
 
 # custom
 image:
-  direct: false
+  direct: true
   cloud.url: http://127.0.0.1
   base.url: http://127.0.0.1:${server.port}

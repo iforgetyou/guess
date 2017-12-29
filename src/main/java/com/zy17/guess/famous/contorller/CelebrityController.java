@@ -27,9 +27,7 @@ public class CelebrityController {
 
   @RequestMapping(value = "", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
-  public Celebrity greeting(
-      @RequestParam() String id
-  ) {
+  public Celebrity create(@RequestParam() String id) {
     Celebrity celebrity = new Celebrity();
     CelebrityResult result = doubanService.findByid(id);
     if (result != null) {

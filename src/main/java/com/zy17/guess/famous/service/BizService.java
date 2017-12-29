@@ -9,7 +9,9 @@ import com.zy17.guess.famous.service.msghandler.ImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.PersistMsgHandle;
 import com.zy17.guess.famous.service.msghandler.RandomImageMsgHandle;
 import com.zy17.guess.famous.service.msghandler.SearchImageHandle;
+import com.zy17.guess.famous.service.msghandler.SubjectAnswerMenuMsgHandle;
 import com.zy17.guess.famous.service.msghandler.SubjectAnswerMsgHandle;
+import com.zy17.guess.famous.service.msghandler.SubjectMenuHandle;
 import com.zy17.guess.famous.service.msghandler.TagMsgHandle;
 import com.zy17.guess.famous.service.msghandler.TestRespMsgHandle;
 
@@ -45,7 +47,10 @@ public class BizService {
       @Autowired TagMsgHandle tagMsgHandle,
       @Autowired SearchImageHandle searchImageHandle,
       @Autowired PersistMsgHandle persistMsgHandle,
-      @Autowired DefaultMsgHandle defaultMsgHandle
+      @Autowired DefaultMsgHandle defaultMsgHandle,
+      @Autowired SubjectAnswerMenuMsgHandle subjectAnswerMenuMsgHandle,
+      @Autowired SubjectMenuHandle subjectMenuHandle
+
   ) {
 //    handlers.add(testRespMsgHandle);
     handlers.add(persistMsgHandle);
@@ -54,13 +59,15 @@ public class BizService {
     // 文字处理开始
     handlers.add(findTopicMsgHandle);
     handlers.add(findSubjectMsgHandle);
+    handlers.add(subjectMenuHandle);
     handlers.add(subjectAnswerMsgHandle);
+    handlers.add(subjectAnswerMenuMsgHandle);
 //    handlers.add(randomImageMsgHandle);
 //    handlers.add(answerMsgHandle);
 //    handlers.add(tagMsgHandle);
 //    handlers.add(searchImageHandle);
     // 文字处理结束
-    handlers.add(defaultMsgHandle);
+//    handlers.add(defaultMsgHandle);
   }
 
 
@@ -90,3 +97,4 @@ public class BizService {
     return resp;
   }
 }
+

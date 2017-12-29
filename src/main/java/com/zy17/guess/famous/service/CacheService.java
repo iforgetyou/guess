@@ -6,6 +6,9 @@ import com.google.common.cache.LoadingCache;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -18,46 +21,45 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 public class CacheService {
-  public static int cacheTimeInMinutes = 2;
-  LoadingCache<String, Object> cache = CacheBuilder.newBuilder()
-      .maximumSize(1000)
-      .expireAfterWrite(cacheTimeInMinutes, TimeUnit.MINUTES)
-      .build(
-          new CacheLoader<String, Object>() {
-            public Object load(String key) throws Exception {
-              // 没有返回空
-              throw new Exception("not found key:" + key);
-            }
-          });
+  @Value("${weixin.command.cache.expire}")
+  public int cacheTimeInMinutes;
+  /**
+   * Redis
+   */
+  @Autowired
+  private RedisTemplate<Object, Object>  redisTemplate;
+
+//  LoadingCache<String, Object> cache = CacheBuilder.newBuilder()
+//      .maximumSize(1000)
+//      .expireAfterWrite(cacheTimeInMinutes, TimeUnit.MINUTES)
+//      .build(
+//          new CacheLoader<String, Object>() {
+//            public Object load(String key) throws Exception {
+//              // 没有返回空
+//              throw new Exception("not found key:" + key);
+//            }
+//          });
 
   public void put(String key, Object value) {
-    log.info("put cache key:{},value:{}", key, value);
-    this.cache.put(key, value);
+    log.debug("put cache key:{},value:{}", key, value);
+    redisTemplate.opsForValue().set(key,value,cacheTimeInMinutes, TimeUnit.MINUTES);
   }
 
   public Object get(String key) {
     Object result = null;
-    try {
-      result = cache.get(key);
-    } catch (ExecutionException e) {
-      log.debug("cache_get_error:" + e.getMessage());
-    }
+      result= redisTemplate.opsForValue().get(key);
+      log.debug("key:{},cache_get_result:{}",key,result);
     return result;
   }
 
   public Object pop(String key) {
-    Object result = null;
-    try {
-      result = cache.get(key);
-      this.delete(key);
-    } catch (ExecutionException e) {
-      log.debug("cache_get_error:" + e.getMessage());
-    }
+    Object result = get(key);
+    redisTemplate.delete(key);
     return result;
   }
 
   public void delete(String key) {
-    cache.invalidate(key);
+    redisTemplate.delete(key);
   }
 
   public static String getNewImageKey(String username) {

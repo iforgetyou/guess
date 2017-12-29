@@ -14,7 +14,7 @@ import weixin.popular.bean.user.User;
  */
 @Data
 @Entity
-public class WeixinUser {
+public class WeixinUser extends BaseEntity{
 
   public WeixinUser() {
   }

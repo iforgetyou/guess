@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ import javax.xml.transform.Source;
 /**
  * 2017/3/6 zy17
  */
+//@Component
 public class DecryptXmlConverter extends Jaxb2RootElementHttpMessageConverter {
   @Override
   protected Object readFromSource(Class<?> clazz, HttpHeaders headers, Source source) throws IOException {

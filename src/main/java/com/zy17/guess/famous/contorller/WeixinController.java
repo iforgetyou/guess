@@ -86,6 +86,7 @@ boolean checkToken;
       try {
         // 加密模式
         echostr = URLDecoder.decode(echostr, "utf-8");
+//        wxBizMsgCrypt.decryptMsg();
         return wxBizMsgCrypt.verifyUrl(msg_signature, timestamp, nonce, echostr);
       } catch (AesException e) {
         log.warn("", e);
@@ -94,6 +95,7 @@ boolean checkToken;
       // 非加密模式
       return echostr;
     }
+
     log.info("request:?signature={}&timestamp={}&nonce={},event={}", signature, timestamp, nonce, XMLConverUtil
         .convertToXML(event));
 
@@ -110,7 +112,13 @@ boolean checkToken;
     }
 
     XMLMessage resp = bizService.handleEvent(event);
-    log.info("{} resp:{}", event.getMsgId(), resp.toXML());
-    return resp.toXML();
+    if( resp!=null){
+      log.info("{} resp:{}", event.getMsgId(), resp.toXML());
+      return resp.toXML();
+    }else{
+      return "";
+    }
   }
+
+
 }
